@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const apiUrl = 'http://localhost:8083';
 
-class EmployeeEdit extends Component {
+class MovementEdit extends Component {
 
   emptyItem = {
     numero:'',
@@ -117,4 +117,4 @@ class EmployeeEdit extends Component {
   }
 }
 
-export default withRouter(EmployeeEdit);
+export default withRouter(MovementEdit);
