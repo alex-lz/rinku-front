@@ -5,15 +5,16 @@ import axios from 'axios';
 
 const apiUrl = 'http://localhost:8083';
 
-class EmployeeEdit extends Component {
+class MovementNew extends Component {
 
   emptyItem = {
-    numero:'',
-    nombre: '',
-    apellido_p: '',
-    apellido_m: '',
-    rol: '',
-    tipo: ''
+    movementId: {
+      numero:0,
+      fecha: ''
+    },
+    entregas: 0,
+    cubrio: false,
+    rol: ''
   };
 
   constructor(props) {
@@ -28,7 +29,7 @@ class EmployeeEdit extends Component {
 
   componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      axios.get(apiUrl + `/employee/${this.props.match.params.id}`).then(response => response.data).then(
+      axios.get(apiUrl + `/movement/${this.props.match.params.fec}/${this.props.match.params.id}`).then(response => response.data).then(
         (result)=>{
             this.setState({item: result})
         },
@@ -43,18 +44,27 @@ class EmployeeEdit extends Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    let item = {...this.state.item};
-    item[name] = value;
-    this.setState({item});
+    if(name == 'numero' || name == 'fecha'){
+      let item = {...this.state.item};
+      item['movementId'][name] = value;
+      this.setState({item});
+
+    } else {
+      let item = {...this.state.item};
+      item[name] = value;
+      this.setState({item});
+
+    }
+    
   }
 
   handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
     axios({
-        method: (item.numero) ? 'put' : 'post',
-        url: (item.numero) ? apiUrl + `/update/employee/${this.props.match.params.id}` : apiUrl + '/register/employee',
-        data: (item.numero) ? item : (delete item.numero, item)
+        method: 'post',
+        url: apiUrl + '/register/movement',
+        data: item
     })
     .then((response) => {
         console.log(response);
@@ -62,31 +72,40 @@ class EmployeeEdit extends Component {
         console.log(error);
       })
     // body: JSON.stringify(item),
-    this.props.history.push('/employee');
+    this.props.history.push('/movement');
   }
 
   render() {
     const {item} = this.state;
-    const title = <h2>{item.numero ? 'Modificar empleado' : 'Nuevo empleado'}</h2>;
+    const title = <h2>{'Nuevo movimiento'}</h2>;
 
     return <div>
       <Container>
         {title}
         <Form onSubmit={this.handleSubmit}>
           <FormGroup>
-            <Label for="nombre">Nombre</Label>
-            <Input type="text" name="nombre" id="nombre" value={item.nombre || ''}
-                   onChange={this.handleChange} autoComplete="nombre"/>
+            <Label for="numero">Numero</Label>
+            <Input type="number" name="numero" id="numero" value={item.movementId.numero || ''}
+                   onChange={this.handleChange} autoComplete="numero"/>
           </FormGroup>
           <FormGroup>
-            <Label for="apellido_p">Apellido paterno</Label>
-            <Input type="text" name="apellido_p" id="apellido_p" value={item.apellido_p || ''}
-                   onChange={this.handleChange} autoComplete="apellido_p"/>
+            <Label for="fecha">Fecha</Label>
+            <Input type="text" name="fecha" id="fecha" value={item.movementId.fecha || ''}
+                   onChange={this.handleChange} autoComplete="fecha"/>
           </FormGroup>
           <FormGroup>
-            <Label for="apellido_m">Apellido materno</Label>
-            <Input type="text" name="apellido_m" id="apellido_m" value={item.apellido_m || ''}
-                   onChange={this.handleChange} autoComplete="apellido_m"/>
+            <Label for="entregas">Entregas</Label>
+            <Input type="number" name="entregas" id="entregas" value={item.entregas || ''}
+                   onChange={this.handleChange} autoComplete="entregas"/>
+          </FormGroup>
+          <FormGroup>
+            <Label for="cubrio">Cubrio turno</Label>
+            <Input type="select" name="cubrio" id="cubrio" value={item.cubrio || null}
+                   onChange={this.handleChange} >
+              <option value={null}>Elegir una opción</option>        
+              <option value={true}>SI</option>
+              <option value={false}>NO</option>
+            </Input>       
           </FormGroup>
           <FormGroup>
             <Label for="rol">Rol</Label>
@@ -99,17 +118,8 @@ class EmployeeEdit extends Component {
             </Input> 
           </FormGroup>
           <FormGroup>
-            <Label for="tipo">Tipo</Label>
-            <Input type="select" name="tipo" id="tipo" value={item.tipo || ''}
-                   onChange={this.handleChange} >
-              <option value="default">Elegir tipo</option>        
-              <option value="Interno">Interno</option>
-              <option value="Externo">Externo</option>
-            </Input>       
-          </FormGroup>
-          <FormGroup>
             <Button color="primary" type="submit">OK</Button>{' '}
-            <Button color="secondary" tag={Link} to="/employee">Cancel</Button>
+            <Button color="secondary" tag={Link} to="/movement">Cancel</Button>
           </FormGroup>
         </Form>
       </Container>
@@ -117,4 +127,4 @@ class EmployeeEdit extends Component {
   }
 }
 
-export default withRouter(EmployeeEdit);
+export default withRouter(MovementNew);

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, ButtonGroup, Container, Table, Input, Label } from 'reactstrap';
 import axios from 'axios';
+//import moment from 'moment'
 import config from '../static/config';
 
 const apiUrl = 'http://localhost:8083';
@@ -57,7 +58,7 @@ class Movement extends Component {
     axios.delete(apiUrl + '/delete/movement/' + fecha + '/' + numero).then(result=>{
        this.setState({
          response:result,
-         movements:movements.filter(mov=>mov.numero !== numero)
+         movements:movements.filter(mov=> (mov.movementId.fecha !== fecha && mov.movementId.numero !== numero) )
        });
      });
   }
@@ -79,11 +80,11 @@ class Movement extends Component {
         <td style={{whiteSpace: 'nowrap'}}>{mov.rol}</td>
         <td>
           <ButtonGroup>
-            <Button size="sm" color="primary" tag={Link} to={"/movement/"+mov.fecha+'/'+mov.numero}>Modificar</Button>
+            <Button size="sm" color="primary" tag={Link} to={"/movement/"+mov.movementId.fecha+'/'+mov.movementId.numero}>Modificar</Button>
             <Button 
               size="sm" 
               color="danger" 
-              onClick={() => window.confirm("Are you sure you wish to delete this item?") && this.remove(mov.fecha,mov.numero)}
+              onClick={() => window.confirm("Estas seguro que deseas eliminar este movimiento?") && this.remove(mov.movementId.fecha, mov.movementId.numero)}
             >Eliminar</Button>
           </ButtonGroup>
         </td>
@@ -94,7 +95,7 @@ class Movement extends Component {
       <div>
         <Container fluid>
           <div className="float-right">
-            <Button color="success" tag={Link} to="/movement//new">Nuevo</Button>
+            <Button color="success" tag={Link} to={`/movement/new`}>Nuevo</Button>
           </div>
           <h3>Listado de movimientos</h3>
           <Table className="table table-hover">
