@@ -82,7 +82,7 @@ class Employee extends Component {
             <Button 
               size="sm" 
               color="danger" 
-              onClick={() => window.confirm("Are you sure you wish to delete this item?") && this.remove(emp.numero)}
+              onClick={() => window.confirm("Esta seguro que desea eliminar a este empleado?") && this.remove(emp.numero)}
             >Eliminar</Button>
           </ButtonGroup>
         </td>

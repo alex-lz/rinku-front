@@ -8,6 +8,7 @@ import EmployeeEdit from './views/EmployeeEdit';
 import Movement from './views/Movement';
 import MovementEdit from './views/MovementEdit';
 import MovementNew from './views/MovementNew';
+import Sueldo from './views/Sueldo';
 
 class App extends Component {
   render() {
@@ -24,6 +25,7 @@ class App extends Component {
                   <Route path='/movement' exact={true} component={Movement}/>
                   <Route path='/movement/:fec/:id' exact={true} component={MovementEdit}/>
                   <Route path='/movement/new' exact={true} component={MovementNew}/>
+                  <Route path='/sueldo' exact={true} component={Sueldo}/>
                 </Container>
               </Switch>
             </div>
